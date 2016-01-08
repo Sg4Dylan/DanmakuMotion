@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BilibiliDM_PluginFramework;
 
-namespace CS_Danmaku_Plgin
+namespace DanmakuMotionPlugin
 {
-    public class CS_Danmaku_Plgin:DMPlugin
+    public class CS_Danmaku_Plgin : DMPlugin
     {
+        public 
+            string setting_in_main_program = "Test";
+            bool setting_dialog_status = false;
+
         public CS_Danmaku_Plgin()
         {
             PluginAuth = "SgDylan";
@@ -54,10 +57,32 @@ namespace CS_Danmaku_Plgin
             }
         }
 
-
         public override void Admin()
         {
             base.Admin();
+            //run setting dialog
+            setting_dialog(setting_in_main_program, setting_dialog_status);
+        }
+
+        public void setting_dialog(string now_setting, bool status)
+        {
+            if (status) return;
+            Setting settingwindow = new Setting();
+            settingwindow.Show();
         }
     }
+
+    //static class Program
+    //{
+    //    /// <summary>
+    //    /// 应用程序的主入口点。
+    //    /// </summary>
+    //    [STAThread]
+    //    static void Main()
+    //    {
+    //        Application.EnableVisualStyles();
+    //        Application.SetCompatibleTextRenderingDefault(false);
+    //        Application.Run(new Setting());
+    //    }
+    //}
 }

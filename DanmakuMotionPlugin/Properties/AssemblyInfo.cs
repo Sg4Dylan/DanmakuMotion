@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("CS-Danmaku-Plgin")]
+[assembly: AssemblyTitle("DanmakuMotionPlugin")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CS-Danmaku-Plgin")]
+[assembly: AssemblyProduct("DanmakuMotionPlugin")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("08f3ae16-583c-4d88-bb08-66b83a58c5a3")]
+[assembly: Guid("6f599665-8f08-4c8a-89b4-0fef813033ed")]
 
 // 程序集的版本信息由下列四个值组成: 
 //
