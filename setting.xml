@@ -1,0 +1,34 @@
+<Key_Vector_Setting>
+  <event>
+    <key>up</key>
+    <motion>{UP}</motion>
+  </event>
+  <event>
+    <key>down</key>
+    <motion>{DOWN}</motion>
+  </event>
+  <event>
+    <key>left</key>
+    <motion>{LEFT}</motion>
+  </event>
+  <event>
+    <key>right</key>
+    <motion>{RIGHT}</motion>
+  </event>
+  <event>
+    <key>space</key>
+    <motion xml:space="preserve"> </motion>
+  </event>
+  <event>
+    <key>enter</key>
+    <motion>{ENTER}</motion>
+  </event>
+  <event>
+    <key>back</key>
+    <motion>{BACKSPACE}</motion>
+  </event>
+  <event>
+    <key>s</key>
+    <motion>sad</motion>
+  </event>
+</Key_Vector_Setting>

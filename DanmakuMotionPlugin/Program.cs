@@ -4,54 +4,71 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BilibiliDM_PluginFramework;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace DanmakuMotionPlugin
 {
-    public class CS_Danmaku_Plgin : DMPlugin
+    public class DanmakuMotionPlugin : DMPlugin
     {
         public 
-            string setting_in_main_program = "Test";
-            bool setting_dialog_status = false;
+            string setting_file_path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\弹幕姬\\Plugins\\setting.xml";
+            Setting settingwindow = new Setting();
+            XmlDocument xml = new XmlDocument();
 
-        public CS_Danmaku_Plgin()
+        public DanmakuMotionPlugin()
         {
             PluginAuth = "SgDylan";
             PluginName = "DanmakuMotion";
             PluginDesc = "直播弹幕操纵动作程式";
             PluginCont = "me@lolicon.link";
-            PluginVer = "v0.1";
-            ReceivedDanmaku += CS_Danmaku_Plgin_ReceivedDanmaku;
+            PluginVer = "0.2 Beta";
+            ReceivedDanmaku += DanmakuMotionPlugin_ReceivedDanmaku;
         }
 
-        private void CS_Danmaku_Plgin_ReceivedDanmaku(object sender, BilibiliDM_PluginFramework.ReceivedDanmakuArgs e)
+        private void DanmakuMotionPlugin_ReceivedDanmaku(object sender, BilibiliDM_PluginFramework.ReceivedDanmakuArgs e)
         {
             if (Status)
             {
                 if (e.Danmaku.MsgType == MsgTypeEnum.Comment)
                 {
-                    //MessageBox.Show(e.Danmaku.CommentText);
-                    switch (e.Danmaku.CommentText)
+                    //載入配置文件
+                    try
                     {
-                        case "up":
-                            SendKeys.SendWait("{UP}");
-                            break;
-                        case "down":
-                            SendKeys.SendWait("{DOWN}");
-                            break;
-                        case "left":
-                            SendKeys.SendWait("{LEFT}");
-                            break;
-                        case "rigth":
-                            SendKeys.SendWait("{RIGHT}");
-                            break;
-                        case "enter":
-                            SendKeys.SendWait("{ENTER}");
-                            break;
-                        case "space":
-                            SendKeys.SendWait(" ");
-                            break;
-                        default:
-                            break;
+                        xml.Load(setting_file_path);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("配置參數載入異常，詳見： " + ex.Message);
+                    }
+                    //彈幕權限分割
+                    if (e.Danmaku.isAdmin)
+                    {
+                        string admin_comment = e.Danmaku.CommentText;
+                        SendKeys.SendWait(admin_comment);
+                    }
+                    else
+                    {
+                        string normal_user_comment = e.Danmaku.CommentText;
+                        try
+                        {
+                            string normal_user_command = "";
+                            XmlNodeList xnList = xml.SelectNodes("/Key_Vector_Setting/event");
+                            foreach (XmlNode xn in xnList)
+                            {
+                                string key = xn["key"].InnerText;
+                                if (key == normal_user_comment)
+                                {
+                                    normal_user_command = xn["motion"].InnerText;
+                                }
+                            }
+                            SendKeys.SendWait(normal_user_command);
+                        }
+                        catch (Exception ex)
+                        {
+                            AddDM("用戶彈幕參數錯誤");
+                            Log("用戶非法彈幕參數，詳細信息" + ex.Message);
+                        }
                     }
                 }
             }
@@ -60,29 +77,15 @@ namespace DanmakuMotionPlugin
         public override void Admin()
         {
             base.Admin();
-            //run setting dialog
-            setting_dialog(setting_in_main_program, setting_dialog_status);
+            setting_dialog();
         }
 
-        public void setting_dialog(string now_setting, bool status)
+        public void setting_dialog()
         {
-            if (status) return;
-            Setting settingwindow = new Setting();
-            settingwindow.Show();
+            if (settingwindow.ShowDialog() == DialogResult.OK)
+            {
+                setting_file_path = settingwindow.setting_file_path;
+            }
         }
     }
-
-    //static class Program
-    //{
-    //    /// <summary>
-    //    /// 应用程序的主入口点。
-    //    /// </summary>
-    //    [STAThread]
-    //    static void Main()
-    //    {
-    //        Application.EnableVisualStyles();
-    //        Application.SetCompatibleTextRenderingDefault(false);
-    //        Application.Run(new Setting());
-    //    }
-    //}
 }
